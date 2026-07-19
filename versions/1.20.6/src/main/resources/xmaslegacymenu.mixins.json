@@ -5,7 +5,8 @@
   "mixins": [
     "TitleScreenMixin",
     "AbstractWidgetMixin",
-    "PlayerTabOverlayMixin"
+    "PlayerTabOverlayMixin",
+    "ScreenMixin"
   ],
   "client": [
   ],

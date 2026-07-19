@@ -106,12 +106,4 @@ public class TitleScreenMixin extends Screen {
 
         ci.cancel();
     }
-
-    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void onKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (keyCode == GLFW.GLFW_KEY_RIGHT_SHIFT) {
-            this.minecraft.setScreen(new ModSettingsScreen(this));
-            cir.setReturnValue(true);
-        }
-    }
 }
