@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.Util;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,53 +24,46 @@ public abstract class AbstractWidgetMixin {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void onRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        // Only override rendering if the current screen is TitleScreen and the widget is visible
         if (Minecraft.getInstance().screen instanceof TitleScreen && this.visible) {
             int x = getX();
             int y = getY();
-            int width = getWidth();
-            int height = getHeight();
+            int w = getWidth();
+            int h = getHeight();
             boolean hovered = isHovered();
-            boolean activeWidget = this.active;
-            int bgColor;
-            int borderColor;
-            int textColor = activeWidget ? 0xFFFFFDD0 : 0xFFA0A0A0; // Cozy warm eggshell white text
 
             String btnText = getMessage().getString();
-            boolean isQuit = btnText.contains("종료") || btnText.toLowerCase().contains("quit") || btnText.toLowerCase().contains("exit");
+            boolean isQuit = btnText.contains("\uC885\uB8CC") || btnText.toLowerCase().contains("quit");
 
-            // Christmas Theme Color Palette:
-            // Pine Green: #0C2E1F, Gold outline: #E5C158, Holiday Red hover: #C0392B, Crimson hover: #9E1B1B
+            int bgColor;
+            int borderColor;
+            int textColor;
+
             if (isQuit) {
-                bgColor = hovered ? 0xFF9E1B1B : 0x700C2E1F;
-                borderColor = hovered ? 0xFFFFFFFF : 0x50FFFFFF;
+                // QUIT GAME: transparent dark bg, red text, red bg on hover
+                bgColor = hovered ? 0x60C0392B : 0x30000000;
+                borderColor = hovered ? 0x40C0392B : 0x10FFFFFF;
+                textColor = active ? (hovered ? 0xFFFFFFFF : 0xFFE74C3C) : 0xFF555555;
             } else {
-                bgColor = hovered ? 0xFFC0392B : 0x700C2E1F;
-                borderColor = hovered ? 0xFFFFFFFF : 0x60E5C158;
+                // Normal buttons: subtle dark glass, brighter on hover
+                bgColor = hovered ? 0x50FFFFFF : 0x30000000;
+                borderColor = hovered ? 0x30FFFFFF : 0x10FFFFFF;
+                textColor = active ? (hovered ? 0xFFFFFFFF : 0xFFD0D0D0) : 0xFF555555;
             }
 
-            // Draw clean premium button background
-            guiGraphics.fill(x, y, x + width, y + height, 0x40000000); // dark shadow overlay
-            guiGraphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, bgColor); // primary fill
+            // Background fill
+            guiGraphics.fill(x, y, x + w, y + h, bgColor);
 
-            // Draw border outline
-            guiGraphics.fill(x, y, x + width, y + 1, borderColor);
-            guiGraphics.fill(x, y, x + 1, y + height, borderColor);
-            guiGraphics.fill(x, y + height - 1, x + width, y + height, borderColor);
-            guiGraphics.fill(x + width - 1, y, x + width, y + height, borderColor);
+            // 1px subtle border
+            guiGraphics.fill(x, y, x + w, y + 1, borderColor);
+            guiGraphics.fill(x, y + h - 1, x + w, y + h, borderColor);
+            guiGraphics.fill(x, y, x + 1, y + h, borderColor);
+            guiGraphics.fill(x + w - 1, y, x + w, y + h, borderColor);
 
-            // Draw button text
-            int textX = x + width / 2;
-            int textY = y + (height - 8) / 2;
-            guiGraphics.drawCenteredString(Minecraft.getInstance().font, getMessage(), textX, textY, textColor);
-
-            // Subtle "shine/glow" animation effect when hovered
-            if (hovered && activeWidget) {
-                long time = Util.getMillis() / 150;
-                int shineAlpha = (int) (15 + Math.sin(time) * 8);
-                int shineColor = (shineAlpha << 24) | 0xFFFFFF;
-                guiGraphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, shineColor);
-            }
+            // Centered text
+            guiGraphics.drawCenteredString(
+                Minecraft.getInstance().font, getMessage(),
+                x + w / 2, y + (h - 8) / 2, textColor
+            );
 
             ci.cancel();
         }

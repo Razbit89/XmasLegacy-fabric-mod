@@ -1,12 +1,12 @@
 package com.xmaslegacy.menu.render;
 
+import com.xmaslegacy.menu.config.ModConfig;
 import net.minecraft.client.gui.GuiGraphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class SnowParticleRenderer {
-    private static final int MAX_PARTICLES = 150;
     private static final int MAX_STARS = 40;
     
     private static final List<SnowParticle> particles = new ArrayList<>();
@@ -14,18 +14,20 @@ public class SnowParticleRenderer {
     private static final Random random = new Random();
     private static int lastWidth = 0;
     private static int lastHeight = 0;
+    private static int lastParticleCount = 0;
 
     public static void init(int width, int height) {
-        if (width == lastWidth && height == lastHeight && !particles.isEmpty()) {
+        if (width == lastWidth && height == lastHeight && lastParticleCount == ModConfig.particleCount && !particles.isEmpty()) {
             return;
         }
         lastWidth = width;
         lastHeight = height;
+        lastParticleCount = ModConfig.particleCount;
         particles.clear();
         stars.clear();
 
         // Initialize falling snow particles
-        for (int i = 0; i < MAX_PARTICLES; i++) {
+        for (int i = 0; i < ModConfig.particleCount; i++) {
             double startX = random.nextDouble() * width;
             double startY = random.nextDouble() * height;
             particles.add(createRandomParticle(startX, startY));
@@ -34,10 +36,14 @@ public class SnowParticleRenderer {
         // Initialize twinkling background stars
         for (int i = 0; i < MAX_STARS; i++) {
             double starX = random.nextDouble() * width;
-            double starY = random.nextDouble() * (height * 0.7); // limit stars to upper 70% of the screen
-            double speed = 0.005 + random.nextDouble() * 0.015; // slow twinkle speed
+            double starY = random.nextDouble() * (height * 0.7);
+            double speed = 0.005 + random.nextDouble() * 0.015;
             stars.add(new TwinklingStar(starX, starY, speed));
         }
+    }
+
+    public static void forceReinit() {
+        lastParticleCount = -1;
     }
 
     private static SnowParticle createRandomParticle(double x, double y) {
@@ -49,11 +55,11 @@ public class SnowParticleRenderer {
     }
 
     public static void render(GuiGraphics guiGraphics, int width, int height) {
-        if (particles.isEmpty() || width != lastWidth || height != lastHeight) {
+        if (particles.isEmpty() || width != lastWidth || height != lastHeight || lastParticleCount != ModConfig.particleCount) {
             init(width, height);
         }
 
-        // 1. Draw twinkling stars first (deep background layer)
+        // 1. Draw twinkling stars (deep background layer)
         for (TwinklingStar star : stars) {
             star.update();
             star.draw(guiGraphics);
@@ -101,7 +107,6 @@ public class SnowParticleRenderer {
             int color = ((int) (this.alpha * 255) << 24) | 0xFFFFFF;
             int ix = (int) this.x;
             int iy = (int) this.y;
-            // Draw a 1x1 pixel star
             guiGraphics.fill(ix, iy, ix + 1, iy + 1, color);
         }
     }
@@ -148,7 +153,6 @@ public class SnowParticleRenderer {
             int ix = (int) this.x;
             int iy = (int) this.y;
             int isz = (int) this.size;
-            
             guiGraphics.fill(ix, iy, ix + isz, iy + isz, color);
         }
     }

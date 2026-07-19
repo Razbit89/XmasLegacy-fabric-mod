@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "xmaslegacymenu",
+  "version": "${version}",
+  "name": "XmasLegacy Custom Menu",
+  "description": "Custom main menu mod for XmasLegacy",
+  "authors": [
+    "XmasLegacy Team"
+  ],
+  "contact": {
+    "homepage": "https://xmaslegacy.com"
+  },
+  "license": "MIT",
+  "icon": "assets/xmaslegacymenu/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.xmaslegacy.menu.XmasLegacyMenuMod"
+    ]
+  },
+  "mixins": [
+    "xmaslegacymenu.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.4",
+    "fabric-api": "*"
+  }
+}
