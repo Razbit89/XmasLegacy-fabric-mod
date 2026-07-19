@@ -9,4 +9,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'xmaslegacy-menu-mod'
+rootProject.name = 'xmaslegacy-menu-mod-root'
+
+include 'versions:1.20.1'
+include 'versions:1.21.1'
