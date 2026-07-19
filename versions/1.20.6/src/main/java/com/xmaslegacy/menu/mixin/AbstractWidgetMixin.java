@@ -35,29 +35,20 @@ public abstract class AbstractWidgetMixin {
             boolean isQuit = btnText.contains("\uC885\uB8CC") || btnText.toLowerCase().contains("quit");
 
             int bgColor;
-            int borderColor;
             int textColor;
 
             if (isQuit) {
-                // QUIT GAME: transparent dark bg, red text, red bg on hover
-                bgColor = hovered ? 0x60C0392B : 0x30000000;
-                borderColor = hovered ? 0x40C0392B : 0x10FFFFFF;
-                textColor = active ? (hovered ? 0xFFFFFFFF : 0xFFE74C3C) : 0xFF555555;
+                // QUIT GAME: Red background, white text
+                bgColor = hovered ? 0xE0E74C3C : 0xE0C0392B;
+                textColor = 0xFFFFFFFF;
             } else {
-                // Normal buttons: subtle dark glass, brighter on hover
-                bgColor = hovered ? 0x50FFFFFF : 0x30000000;
-                borderColor = hovered ? 0x30FFFFFF : 0x10FFFFFF;
-                textColor = active ? (hovered ? 0xFFFFFFFF : 0xFFD0D0D0) : 0xFF555555;
+                // Normal buttons: Dark gray, lighter on hover
+                bgColor = hovered ? 0xE0333333 : 0xE01C1C1C;
+                textColor = active ? 0xFFFFFFFF : 0xFF555555;
             }
 
-            // Background fill
+            // Background fill (No borders)
             guiGraphics.fill(x, y, x + w, y + h, bgColor);
-
-            // 1px subtle border
-            guiGraphics.fill(x, y, x + w, y + 1, borderColor);
-            guiGraphics.fill(x, y + h - 1, x + w, y + h, borderColor);
-            guiGraphics.fill(x, y, x + 1, y + h, borderColor);
-            guiGraphics.fill(x + w - 1, y, x + w, y + h, borderColor);
 
             // Centered text
             guiGraphics.drawCenteredString(
