@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
-import net.minecraft.client.gui.screens.options.OptionsScreen;
+import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -76,7 +76,7 @@ public class TitleScreenMixin extends Screen {
             }
         ).bounds(centerX, startY + spacing * 3, buttonWidth, buttonHeight).build());
 
-        // QUIT GAME — separated at the bottom with extra gap
+        // QUIT GAME ??separated at the bottom with extra gap
         this.addRenderableWidget(Button.builder(
             Component.literal("QUIT GAME"),
             button -> this.minecraft.stop()
