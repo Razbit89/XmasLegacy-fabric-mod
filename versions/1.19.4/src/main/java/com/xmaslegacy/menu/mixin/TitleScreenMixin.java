@@ -4,7 +4,6 @@ import com.xmaslegacy.menu.ModMenuHelper;
 import com.xmaslegacy.menu.config.ModConfig;
 import com.xmaslegacy.menu.render.SnowParticleRenderer;
 import com.xmaslegacy.menu.screen.ModSettingsScreen;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -109,7 +108,7 @@ public class TitleScreenMixin extends Screen {
         ci.cancel();
     }
 
-    @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "keyPressed(III)Z", at = @At("HEAD"), cancellable = true)
     private void onKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (keyCode == GLFW.GLFW_KEY_RIGHT_SHIFT) {
             this.minecraft.setScreen(new ModSettingsScreen(this));
