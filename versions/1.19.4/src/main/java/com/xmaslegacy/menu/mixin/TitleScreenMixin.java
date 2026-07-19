@@ -4,12 +4,12 @@ import com.xmaslegacy.menu.ModMenuHelper;
 import com.xmaslegacy.menu.config.ModConfig;
 import com.xmaslegacy.menu.render.SnowParticleRenderer;
 import com.xmaslegacy.menu.screen.ModSettingsScreen;
-import net.minecraft.client.gui.GuiGraphics;
+
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
-import net.minecraft.client.gui.screens.options.OptionsScreen;
+
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -57,10 +57,10 @@ public class TitleScreenMixin extends Screen {
             button -> this.minecraft.setScreen(new JoinMultiplayerScreen(this))
         ).bounds(centerX, startY + spacing, buttonWidth, buttonHeight).build());
 
-        // Settings
+        // Options
         this.addRenderableWidget(Button.builder(
             Component.literal("\u2699  Settings"),
-            button -> this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options))
+            button -> this.minecraft.setScreen(new net.minecraft.client.gui.screens.OptionsScreen(this, this.minecraft.options))
         ).bounds(centerX, startY + spacing * 2, buttonWidth, buttonHeight).build());
 
         // Mods
@@ -76,7 +76,7 @@ public class TitleScreenMixin extends Screen {
             }
         ).bounds(centerX, startY + spacing * 3, buttonWidth, buttonHeight).build());
 
-        // QUIT GAME ??separated at the bottom with extra gap
+        // QUIT GAME
         this.addRenderableWidget(Button.builder(
             Component.literal("QUIT GAME"),
             button -> this.minecraft.stop()
@@ -84,12 +84,12 @@ public class TitleScreenMixin extends Screen {
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void onRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    private void onRender(com.mojang.blaze3d.vertex.PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         // Dark solid background to mimic Feather's dark theme
-        guiGraphics.fill(0, 0, this.width, this.height, 0xFF181818);
+        this.fillGradient(poseStack, 0, 0, this.width, this.height, 0xFF181818, 0xFF181818);
 
         if (ModConfig.snowEnabled) {
-            SnowParticleRenderer.render(guiGraphics, this.width, this.height);
+            SnowParticleRenderer.render(poseStack, this.width, this.height);
         }
 
         // Feather-like Logo and Text at the top center
@@ -97,17 +97,20 @@ public class TitleScreenMixin extends Screen {
         int logoX = (this.width - logoSize - 120) / 2; // Offset to left of text
         int logoY = this.height / 4 - 20;
         
-        guiGraphics.blit(CUSTOM_LOGO, logoX, logoY, 0, 0, logoSize, logoSize, logoSize, logoSize);
-        guiGraphics.drawString(this.font, "XMASLEGACY CLIENT", logoX + logoSize + 10, logoY + (logoSize - 8) / 2, 0xFFFFFFFF, true);
+        com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(0, CUSTOM_LOGO);
+        com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.gui.GuiComponent.blit(poseStack, logoX, logoY, 0, 0, logoSize, logoSize, logoSize, logoSize);
+        
+        net.minecraft.client.gui.GuiComponent.drawString(poseStack, this.font, "XMASLEGACY CLIENT", logoX + logoSize + 10, logoY + (logoSize - 8) / 2, 0xFFFFFFFF);
 
         // Render widgets (buttons)
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.render(poseStack, mouseX, mouseY, partialTick);
 
         // Version text at bottom
-        guiGraphics.drawCenteredString(this.font, "XmasLegacy 1.21.1 (release/latest)", this.width / 2, this.height - 12, 0x60FFFFFF);
+        net.minecraft.client.gui.GuiComponent.drawCenteredString(poseStack, this.font, "XmasLegacy 1.19.4 (release/latest)", this.width / 2, this.height - 12, 0x60FFFFFF);
 
         // Right Shift hint
-        guiGraphics.drawString(this.font, "Right Shift \u2192 Settings", 4, this.height - 12, 0x30FFFFFF, false);
+        net.minecraft.client.gui.GuiComponent.drawString(poseStack, this.font, "Right Shift \u2192 Settings", 4, this.height - 12, 0x30FFFFFF);
 
         ci.cancel();
     }

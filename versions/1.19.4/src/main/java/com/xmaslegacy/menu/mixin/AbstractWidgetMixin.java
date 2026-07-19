@@ -1,7 +1,7 @@
 package com.xmaslegacy.menu.mixin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ public abstract class AbstractWidgetMixin {
     @Shadow public boolean visible;
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void onRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    private void onRender(com.mojang.blaze3d.vertex.PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         if (Minecraft.getInstance().screen instanceof TitleScreen && this.visible) {
             int x = getX();
             int y = getY();
@@ -48,10 +48,10 @@ public abstract class AbstractWidgetMixin {
             }
 
             // Background fill (No borders)
-            guiGraphics.fill(x, y, x + w, y + h, bgColor);
+            net.minecraft.client.gui.GuiComponent.fill(poseStack, x, y, x + w, y + h, bgColor);
 
             // Centered text
-            guiGraphics.drawCenteredString(
+            net.minecraft.client.gui.GuiComponent.drawCenteredString(poseStack, 
                 Minecraft.getInstance().font, getMessage(),
                 x + w / 2, y + (h - 8) / 2, textColor
             );
