@@ -34,16 +34,23 @@ public abstract class AbstractWidgetMixin {
             boolean hovered = isHovered();
             boolean activeWidget = this.active;
 
-            // Spec colors:
-            // 버튼 기본: #5196DF (0xFF5196DF)
-            // 버튼 hover: #8EBAEB (0xFF8EBAEB)
-            // 텍스트: #EAF6F6 (0xFFEAF6F6)
-            int bgColor = hovered ? 0xFF8EBAEB : 0xFF5196DF;
-            int borderColor = hovered ? 0xFFFFFFFF : 0xFF8EBAEB;
+            int bgColor;
+            int borderColor;
             int textColor = activeWidget ? 0xFFEAF6F6 : 0xFFA0A0A0;
 
+            String btnText = getMessage().getString();
+            boolean isQuit = btnText.contains("종료") || btnText.toLowerCase().contains("quit") || btnText.toLowerCase().contains("exit");
+
+            if (isQuit) {
+                bgColor = hovered ? 0xFFD32F2F : 0x700B1A24;
+                borderColor = hovered ? 0xFFFFFFFF : 0x50FF5555;
+            } else {
+                bgColor = hovered ? 0xFF5196DF : 0x700B1A24;
+                borderColor = hovered ? 0xFFFFFFFF : 0x508EBAEB;
+            }
+
             // Draw clean premium button background
-            guiGraphics.fill(x, y, x + width, y + height, 0x50000000); // semi-transparent background overlay
+            guiGraphics.fill(x, y, x + width, y + height, 0x40000000); // dark shadow overlay
             guiGraphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, bgColor); // primary fill
 
             // Draw border outline
@@ -60,7 +67,7 @@ public abstract class AbstractWidgetMixin {
             // Subtle "shine/glow" animation effect when hovered
             if (hovered && activeWidget) {
                 long time = Util.getMillis() / 150;
-                int shineAlpha = (int) (20 + Math.sin(time) * 10);
+                int shineAlpha = (int) (15 + Math.sin(time) * 8);
                 int shineColor = (shineAlpha << 24) | 0xFFFFFF;
                 guiGraphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, shineColor);
             }
