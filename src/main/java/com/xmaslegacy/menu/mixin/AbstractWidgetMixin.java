@@ -21,10 +21,12 @@ public abstract class AbstractWidgetMixin {
     @Shadow public abstract Component getMessage();
     @Shadow public abstract boolean isHovered();
     @Shadow public boolean active;
+    @Shadow public boolean visible;
 
-    @Inject(method = "renderWidget", at = @At("HEAD"), cancellable = true)
-    private void onRenderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        if (Minecraft.getInstance().screen instanceof TitleScreen) {
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    private void onRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+        // Only override rendering if the current screen is TitleScreen and the widget is visible
+        if (Minecraft.getInstance().screen instanceof TitleScreen && this.visible) {
             int x = getX();
             int y = getY();
             int width = getWidth();
