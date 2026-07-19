@@ -25,7 +25,7 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build mod
-        run: gradle build
+        run: gradle build --no-parallel --no-daemon
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
