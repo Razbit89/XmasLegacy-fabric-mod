@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
+import org.joml.Quaternionf;
 
 public class CosmeticsScreen extends Screen {
     private final Screen parent;
@@ -99,7 +100,11 @@ public class CosmeticsScreen extends Screen {
             int scale = 50;
             float lookX = (float) (playerX - mouseX);
             float lookY = (float) (playerY - 50 - mouseY);
-            InventoryScreen.renderEntityInInventory(guiGraphics, playerX, playerY, scale, lookX, lookY, this.minecraft.player);
+            float yaw = (float) Math.atan(lookX / 40.0f);
+            float pitch = (float) Math.atan(lookY / 40.0f);
+            Quaternionf bodyRotation = new Quaternionf().rotateZ((float) Math.PI).rotateY(yaw * 20.0f * 0.017453292f);
+            Quaternionf headRotation = new Quaternionf().rotateX(-pitch * 20.0f * 0.017453292f);
+            InventoryScreen.renderEntityInInventory(guiGraphics, playerX, playerY, scale, bodyRotation, headRotation, this.minecraft.player);
         } else {
             // Draw placeholder text notice
             int textY = containerY + 45;
