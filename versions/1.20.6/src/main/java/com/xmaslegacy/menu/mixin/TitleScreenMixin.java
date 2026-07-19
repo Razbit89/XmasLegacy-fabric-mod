@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
     @Unique
-    private static final ResourceLocation CUSTOM_LOGO = ResourceLocation.fromNamespaceAndPath("xmaslegacymenu", "textures/gui/logo.png");
+    private static final ResourceLocation CUSTOM_LOGO = new ResourceLocation("xmaslegacymenu", "textures/gui/logo.png");
 
     protected TitleScreenMixin(Component title) {
         super(title);
