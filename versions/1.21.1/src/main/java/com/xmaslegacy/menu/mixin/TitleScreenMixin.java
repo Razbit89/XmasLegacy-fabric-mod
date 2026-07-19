@@ -104,7 +104,7 @@ public class TitleScreenMixin extends Screen {
 
         // 4. Draw centered logo text below icon
         int textY = logoY + logoSize + 8;
-        guiGraphics.drawCenteredString(this.font, "XMASLEGACY CLIENT", this.width / 2, textY, 0xFFEAF6F6);
+        guiGraphics.drawCenteredString(this.font, "XMASLEGACY CLIENT", this.width / 2, textY, 0xFFE5C158);
 
         // 5. Render custom active widgets (buttons) using super.render (skips vanilla logo/splash/version texts)
         super.render(guiGraphics, mouseX, mouseY, partialTick);

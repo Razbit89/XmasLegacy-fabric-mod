@@ -36,17 +36,19 @@ public abstract class AbstractWidgetMixin {
 
             int bgColor;
             int borderColor;
-            int textColor = activeWidget ? 0xFFEAF6F6 : 0xFFA0A0A0;
+            int textColor = activeWidget ? 0xFFFFFDD0 : 0xFFA0A0A0; // Cozy warm eggshell white text
 
             String btnText = getMessage().getString();
             boolean isQuit = btnText.contains("종료") || btnText.toLowerCase().contains("quit") || btnText.toLowerCase().contains("exit");
 
+            // Christmas Theme Color Palette:
+            // Pine Green: #0C2E1F, Gold outline: #E5C158, Holiday Red hover: #C0392B, Crimson hover: #9E1B1B
             if (isQuit) {
-                bgColor = hovered ? 0xFFD32F2F : 0x700B1A24;
-                borderColor = hovered ? 0xFFFFFFFF : 0x50FF5555;
+                bgColor = hovered ? 0xFF9E1B1B : 0x700C2E1F;
+                borderColor = hovered ? 0xFFFFFFFF : 0x50FFFFFF;
             } else {
-                bgColor = hovered ? 0xFF5196DF : 0x700B1A24;
-                borderColor = hovered ? 0xFFFFFFFF : 0x508EBAEB;
+                bgColor = hovered ? 0xFFC0392B : 0x700C2E1F;
+                borderColor = hovered ? 0xFFFFFFFF : 0x60E5C158;
             }
 
             // Draw clean premium button background
