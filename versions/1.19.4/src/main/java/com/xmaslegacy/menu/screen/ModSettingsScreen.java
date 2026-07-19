@@ -2,7 +2,7 @@ package com.xmaslegacy.menu.screen;
 
 import com.xmaslegacy.menu.config.ModConfig;
 import com.xmaslegacy.menu.render.SnowParticleRenderer;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -60,22 +60,22 @@ public class ModSettingsScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        guiGraphics.fillGradient(0, 0, this.width, this.height, 0xFF0A0F14, 0xFF0C1A12);
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        this.fillGradient(poseStack, 0, 0, this.width, this.height, 0xFF0A0F14, 0xFF0C1A12);
 
         int panelWidth = 240;
         int panelX = (this.width - panelWidth) / 2;
         int panelY = this.height / 2 - 90;
         int panelHeight = 180;
-        guiGraphics.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0x40000000);
-        guiGraphics.fill(panelX, panelY, panelX + panelWidth, panelY + 1, 0x20FFFFFF);
-        guiGraphics.fill(panelX, panelY + panelHeight - 1, panelX + panelWidth, panelY + panelHeight, 0x20FFFFFF);
-        guiGraphics.fill(panelX, panelY, panelX + 1, panelY + panelHeight, 0x20FFFFFF);
-        guiGraphics.fill(panelX + panelWidth - 1, panelY, panelX + panelWidth, panelY + panelHeight, 0x20FFFFFF);
+        fill(poseStack, panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0x40000000);
+        fill(poseStack, panelX, panelY, panelX + panelWidth, panelY + 1, 0x20FFFFFF);
+        fill(poseStack, panelX, panelY + panelHeight - 1, panelX + panelWidth, panelY + panelHeight, 0x20FFFFFF);
+        fill(poseStack, panelX, panelY, panelX + 1, panelY + panelHeight, 0x20FFFFFF);
+        fill(poseStack, panelX + panelWidth - 1, panelY, panelX + panelWidth, panelY + panelHeight, 0x20FFFFFF);
 
-        guiGraphics.drawCenteredString(this.font, "XmasLegacy Settings", this.width / 2, panelY + 10, 0xFFE5C158);
+        drawCenteredString(poseStack, this.font, "XmasLegacy Settings", this.width / 2, panelY + 10, 0xFFE5C158);
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.render(poseStack, mouseX, mouseY, partialTick);
     }
 
     @Override

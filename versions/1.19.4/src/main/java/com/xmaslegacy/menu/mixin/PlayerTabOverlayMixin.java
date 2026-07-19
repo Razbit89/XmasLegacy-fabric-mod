@@ -1,7 +1,6 @@
 package com.xmaslegacy.menu.mixin;
 
 import com.xmaslegacy.menu.config.ModConfig;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;

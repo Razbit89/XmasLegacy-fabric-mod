@@ -23,7 +23,7 @@ public abstract class AbstractWidgetMixin {
     @Shadow public boolean visible;
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void onRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    private void onRender(com.mojang.blaze3d.vertex.PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         if (Minecraft.getInstance().screen instanceof TitleScreen && this.visible) {
             int x = getX();
             int y = getY();
@@ -51,16 +51,16 @@ public abstract class AbstractWidgetMixin {
             }
 
             // Background fill
-            guiGraphics.fill(x, y, x + w, y + h, bgColor);
+            net.minecraft.client.gui.GuiComponent.fill(poseStack, x, y, x + w, y + h, bgColor);
 
             // 1px subtle border
-            guiGraphics.fill(x, y, x + w, y + 1, borderColor);
-            guiGraphics.fill(x, y + h - 1, x + w, y + h, borderColor);
-            guiGraphics.fill(x, y, x + 1, y + h, borderColor);
-            guiGraphics.fill(x + w - 1, y, x + w, y + h, borderColor);
+            net.minecraft.client.gui.GuiComponent.fill(poseStack, x, y, x + w, y + 1, borderColor);
+            net.minecraft.client.gui.GuiComponent.fill(poseStack, x, y + h - 1, x + w, y + h, borderColor);
+            net.minecraft.client.gui.GuiComponent.fill(poseStack, x, y, x + 1, y + h, borderColor);
+            net.minecraft.client.gui.GuiComponent.fill(poseStack, x + w - 1, y, x + w, y + h, borderColor);
 
             // Centered text
-            guiGraphics.drawCenteredString(
+            net.minecraft.client.gui.GuiComponent.drawCenteredString(poseStack,
                 Minecraft.getInstance().font, getMessage(),
                 x + w / 2, y + (h - 8) / 2, textColor
             );

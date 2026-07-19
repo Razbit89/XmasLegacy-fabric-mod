@@ -1,7 +1,8 @@
 package com.xmaslegacy.menu.render;
 
 import com.xmaslegacy.menu.config.ModConfig;
-import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,14 +27,12 @@ public class SnowParticleRenderer {
         particles.clear();
         stars.clear();
 
-        // Initialize falling snow particles
         for (int i = 0; i < ModConfig.particleCount; i++) {
             double startX = random.nextDouble() * width;
             double startY = random.nextDouble() * height;
             particles.add(createRandomParticle(startX, startY));
         }
 
-        // Initialize twinkling background stars
         for (int i = 0; i < MAX_STARS; i++) {
             double starX = random.nextDouble() * width;
             double starY = random.nextDouble() * (height * 0.7);
@@ -54,21 +53,19 @@ public class SnowParticleRenderer {
         return new SnowParticle(x, y, speedY, speedX, size, alpha);
     }
 
-    public static void render(GuiGraphics guiGraphics, int width, int height) {
+    public static void render(PoseStack poseStack, int width, int height) {
         if (particles.isEmpty() || width != lastWidth || height != lastHeight || lastParticleCount != ModConfig.particleCount) {
             init(width, height);
         }
 
-        // 1. Draw twinkling stars (deep background layer)
         for (TwinklingStar star : stars) {
             star.update();
-            star.draw(guiGraphics);
+            star.draw(poseStack);
         }
 
-        // 2. Draw falling snow particles (foreground layer)
         for (SnowParticle particle : particles) {
             particle.update(width, height);
-            particle.draw(guiGraphics);
+            particle.draw(poseStack);
         }
     }
 
@@ -103,11 +100,11 @@ public class SnowParticleRenderer {
             }
         }
 
-        public void draw(GuiGraphics guiGraphics) {
+        public void draw(PoseStack poseStack) {
             int color = ((int) (this.alpha * 255) << 24) | 0xFFFFFF;
             int ix = (int) this.x;
             int iy = (int) this.y;
-            guiGraphics.fill(ix, iy, ix + 1, iy + 1, color);
+            GuiComponent.fill(poseStack, ix, iy, ix + 1, iy + 1, color);
         }
     }
 
@@ -148,12 +145,12 @@ public class SnowParticleRenderer {
             }
         }
 
-        public void draw(GuiGraphics guiGraphics) {
+        public void draw(PoseStack poseStack) {
             int color = ((int) (this.alpha * 255) << 24) | 0xFFFFFF;
             int ix = (int) this.x;
             int iy = (int) this.y;
             int isz = (int) this.size;
-            guiGraphics.fill(ix, iy, ix + isz, iy + isz, color);
+            GuiComponent.fill(poseStack, ix, iy, ix + isz, iy + isz, color);
         }
     }
 }

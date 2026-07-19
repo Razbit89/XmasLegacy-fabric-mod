@@ -84,25 +84,27 @@ public class TitleScreenMixin extends Screen {
     }
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void onRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        guiGraphics.fillGradient(0, 0, this.width, this.height, 0xFF0A0F14, 0xFF0C1A12);
+    private void onRender(com.mojang.blaze3d.vertex.PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+        this.fillGradient(poseStack, 0, 0, this.width, this.height, 0xFF0A0F14, 0xFF0C1A12);
 
         if (ModConfig.snowEnabled) {
-            SnowParticleRenderer.render(guiGraphics, this.width, this.height);
+            SnowParticleRenderer.render(poseStack, this.width, this.height);
         }
 
         int logoSize = 40;
         int logoX = (this.width - logoSize) / 2;
         int logoY = this.height / 2 - 76;
-        guiGraphics.blit(CUSTOM_LOGO, logoX, logoY, 0, 0, logoSize, logoSize, logoSize, logoSize);
+        com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(0, CUSTOM_LOGO);
+        com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.gui.GuiComponent.blit(poseStack, logoX, logoY, 0, 0, logoSize, logoSize, logoSize, logoSize);
 
         int textY = logoY + logoSize + 6;
-        guiGraphics.drawCenteredString(this.font, "XMASLEGACY", this.width / 2, textY, 0xFFE5C158);
+        net.minecraft.client.gui.GuiComponent.drawCenteredString(poseStack, this.font, "XMASLEGACY", this.width / 2, textY, 0xFFE5C158);
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.render(poseStack, mouseX, mouseY, partialTick);
 
-        guiGraphics.drawCenteredString(this.font, "XmasLegacy v1.0.0", this.width / 2, this.height - 12, 0x60FFFFFF);
-        guiGraphics.drawString(this.font, "Right Shift \u2192 Settings", 4, this.height - 12, 0x30FFFFFF, false);
+        net.minecraft.client.gui.GuiComponent.drawCenteredString(poseStack, this.font, "XmasLegacy v1.0.0", this.width / 2, this.height - 12, 0x60FFFFFF);
+        net.minecraft.client.gui.GuiComponent.drawString(poseStack, this.font, "Right Shift \u2192 Settings", 4, this.height - 12, 0x30FFFFFF);
 
         ci.cancel();
     }
