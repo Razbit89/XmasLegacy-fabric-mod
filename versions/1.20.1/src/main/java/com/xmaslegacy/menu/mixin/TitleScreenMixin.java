@@ -84,7 +84,7 @@ public class TitleScreenMixin extends Screen {
         SnowParticleRenderer.init(this.width, this.height);
     }
 
-    @Inject(method = "renderPanorama(Lnet/minecraft/client/gui/GuiGraphics;F)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderPanorama", at = @At("HEAD"), cancellable = true)
     private void onRenderPanorama(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         // 1. Draw the cyan/sky-blue to dark-cyan gradient background
         guiGraphics.fillGradient(0, 0, this.width, this.height, 0xFF2B79CC, 0xFF0E4C5C);
